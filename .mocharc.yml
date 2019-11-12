@@ -1,0 +1,9 @@
+extension:
+  - js
+recursive:
+  - true
+require: '@babel/register'
+reporter: spec
+reporter-option:
+  - 
+exit: true
