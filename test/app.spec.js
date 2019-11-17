@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import request from 'supertest';
 import app from '../src';
 
-describe('ensure app is setup properly', () => {
+describe('server setup', () => {
   it('app should be a function', () => {
     expect(app).to.be.a('function');
   });
