@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
+import { config } from 'dotenv';
 import Model from './model';
 
+config();
 const privateProps = new WeakMap();
 
 export default class User extends Model {
@@ -36,6 +38,7 @@ export default class User extends Model {
       isAdmin: 'is_admin',
       jobRole: 'job_role',
       gender: 'gender',
+      address: 'address',
       department: 'department',
     };
   }
@@ -46,7 +49,7 @@ export default class User extends Model {
 
   static async create(data) {
     const userData = { ...data };
-    userData.password = bcrypt.hashSync(data.password, process.env.SALT);
+    userData.password = bcrypt.hashSync(data.password, +process.env.SALT);
     return super.create(userData);
   }
 }
