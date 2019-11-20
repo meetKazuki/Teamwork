@@ -4,6 +4,5 @@ recursive:
   - true
 require: '@babel/register'
 reporter: spec
-reporter-option:
-  - 
+timeout: 1000
 exit: true
