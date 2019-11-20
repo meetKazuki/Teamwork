@@ -6,17 +6,18 @@ const DEBUG = debug('DB');
 
 // create users table
 const createUsers = `
+  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
   CREATE TYPE user_gender AS ENUM ('male', 'female');
   CREATE TABLE IF NOT EXISTS users(
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     firstname VARCHAR(50) NOT NULL,
     lastname VARCHAR(50) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) UNIQUE NOT NULL,
     gender user_gender,
     job_role TEXT NOT NULL,
-    department VARCHAR(255) NOT NULL,
     address TEXT NOT NULL,
+    department VARCHAR(255) NOT NULL,
     is_admin BOOLEAN DEFAULT false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -24,8 +25,9 @@ const createUsers = `
 
 // create articles table
 const createArticles = `
+  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
   CREATE TABLE IF NOT EXISTS articles(
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     title TEXT NOT NULL,
     body TEXT NOT NULL,
@@ -36,7 +38,7 @@ const createArticles = `
 // create gifs table
 const createGifs = `
   CREATE TABLE IF NOT EXISTS gifs(
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     image_url VARCHAR(150) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -46,7 +48,7 @@ const createGifs = `
 // create comments table
 const createComments = `
   CREATE TABLE IF NOT EXISTS comments(
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     gif_id UUID REFERENCES gifs(id),
     article_id UUID REFERENCES articles(id),

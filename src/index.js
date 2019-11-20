@@ -1,6 +1,7 @@
 import { config } from 'dotenv';
 import debug from 'debug';
 import express from 'express';
+import router from './routes';
 
 config();
 
@@ -9,6 +10,7 @@ const DEBUG = debug('dev');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(router);
 
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'welcome to Teamwork' });
