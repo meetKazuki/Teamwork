@@ -1,5 +1,4 @@
-/* eslint-disable import/prefer-default-export */
-export const extractParams = (fields) => {
+const extractParams = (fields) => {
   const keys = Object.keys(fields);
   let params = '';
 
@@ -11,3 +10,5 @@ export const extractParams = (fields) => {
   }
   return params;
 };
+
+export { extractParams };

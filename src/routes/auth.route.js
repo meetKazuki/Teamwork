@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import authController from '../controllers/auth.controller';
 import authMiddleware from '../middleware/auth';
-import authSchemas from '../validations/auth.validations';
+import authSchemas from '../validations/auth.validation';
 import validator from '../middleware/validator';
 
 const auth = Router();
 
-const { signupSchema } = authSchemas;
-const { signup } = authController;
+const { signupSchema, signinSchema } = authSchemas;
+const { signup, signin } = authController;
 const { verifyExisting } = authMiddleware;
 
 auth.post(
@@ -15,6 +15,12 @@ auth.post(
   validator(signupSchema),
   verifyExisting,
   signup,
+);
+
+auth.post(
+  '/signin',
+  validator(signinSchema),
+  signin,
 );
 
 export default auth;

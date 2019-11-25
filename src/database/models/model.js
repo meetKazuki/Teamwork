@@ -156,8 +156,12 @@ export default class Model {
     return [...abstract, ...(Model.additionalFields())];
   }
 
-  static get hiddenAttributes() {
+  static hiddenAttributes() {
     return [];
+  }
+
+  static get populateHiddenFields() {
+    return this.populateHidden;
   }
 
   static set populateHiddenFields(value) {

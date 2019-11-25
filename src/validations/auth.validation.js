@@ -74,4 +74,24 @@ export default {
       .isAlphanumeric()
       .withMessage('Password must be alphanumeric'),
   ],
+
+  signinSchema: [
+    check('email')
+      .not()
+      .isEmpty()
+      .withMessage('Email address is required')
+      .isEmail()
+      .withMessage('Enter a valid email address')
+      .normalizeEmail(),
+
+    check('password')
+      .trim()
+      .not()
+      .isEmpty({ ignore_whitespace: true })
+      .withMessage('Password cannot be blank')
+      .isLength({ min: 8, max: 15 })
+      .withMessage('Password should be between 8 to 15 characters')
+      .isAlphanumeric()
+      .withMessage('Password must be alphanumeric'),
+  ],
 };

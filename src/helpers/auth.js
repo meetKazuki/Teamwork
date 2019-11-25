@@ -9,4 +9,4 @@ const generateToken = ({ id, email, isAdmin }) => {
   return `Bearer ${token}`;
 };
 
-export default generateToken;
+export { generateToken };

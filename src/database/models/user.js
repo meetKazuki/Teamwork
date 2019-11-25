@@ -1,9 +1,8 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { config } from 'dotenv';
 import Model from './model';
 
 config();
-const privateProps = new WeakMap();
 
 export default class User extends Model {
   constructor(attributes) {
@@ -17,11 +16,7 @@ export default class User extends Model {
     this.department = attributes.department;
     this.address = attributes.address;
     this.isAdmin = attributes.isAdmin;
-    privateProps.set(this, { password: attributes.password });
-  }
-
-  get password() {
-    return privateProps.get(this).password;
+    this.password = attributes.password;
   }
 
   static table() {
@@ -53,3 +48,12 @@ export default class User extends Model {
     return super.create(userData);
   }
 }
+
+User.prototype.getSafeDataValues = function getSafeDataValues() {
+  const { password, ...data } = this;
+  return data;
+};
+
+User.prototype.validatePassword = async function validatePassword(password) {
+  return bcrypt.compareSync(password, this.password);
+};
