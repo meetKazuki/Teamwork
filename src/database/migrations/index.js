@@ -13,7 +13,7 @@ const createUsers = `
     firstname VARCHAR(50) NOT NULL,
     lastname VARCHAR(50) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
-    password VARCHAR(255) UNIQUE NOT NULL,
+    password TEXT NOT NULL,
     gender user_gender,
     job_role TEXT NOT NULL,
     address TEXT NOT NULL,

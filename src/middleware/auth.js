@@ -12,10 +12,4 @@ export default {
     }
     return next();
   },
-
-  /* verifyToken: (req, res, next) => {
-
-  }, */
-
-  // const permit = (...permitted)
 };
