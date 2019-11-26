@@ -1,6 +1,7 @@
 import { matchedData, validationResult } from 'express-validator';
+import { ApplicationError } from '../helpers/error';
 
-export default (schemas) => {
+export default (schemas, status = 400) => {
   const validationCheck = async (req, res, next) => {
     const errors = validationResult(req);
     req = { ...req, ...matchedData(req) }; // eslint-disable-line
@@ -13,13 +14,10 @@ export default (schemas) => {
           return acc;
         }, {});
 
-      return res.status(400).json({
-        status: 'validation error',
-        error: mappedErrs,
-      });
+      const appError = new ApplicationError(status, 'validation error', mappedErrs);
+      return next(appError);
     }
     return next();
   };
-
   return [...(schemas.length && [schemas]), validationCheck];
 };

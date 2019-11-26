@@ -2,7 +2,7 @@ extension:
   - js
 recursive:
   - true
-require: '@babel/register'
+require: ['@babel/register', 'test/setup']
 reporter: spec
-timeout: 1000
+timeout: 10000
 exit: true

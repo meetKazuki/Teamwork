@@ -7,11 +7,13 @@ import validator from '../middleware/validator';
 const auth = Router();
 
 const { signupSchema, signinSchema } = authSchemas;
+const { isAdmin, verifyExisting, verifyToken } = authMiddleware;
 const { signup, signin } = authController;
-const { verifyExisting } = authMiddleware;
 
 auth.post(
-  '/signup',
+  '/create-user',
+  verifyToken,
+  isAdmin,
   validator(signupSchema),
   verifyExisting,
   signup,
