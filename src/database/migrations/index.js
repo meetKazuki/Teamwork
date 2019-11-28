@@ -40,7 +40,8 @@ const createGifs = `
   CREATE TABLE IF NOT EXISTS gifs(
     id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    image_url VARCHAR(255) NOT NULL,
+    title TEXT NOT NULL,
+    image_url TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );`;
@@ -49,9 +50,10 @@ const createGifs = `
 const createComments = `
   CREATE TABLE IF NOT EXISTS comments(
     id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     gif_id UUID REFERENCES gifs(id),
     article_id UUID REFERENCES articles(id),
+    body TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );`;

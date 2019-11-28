@@ -2,7 +2,7 @@ import { ApplicationError, NotFoundError } from '../helpers/error';
 import { Article } from '../database/models';
 
 export default {
-  create: async (req, res, next) => {
+  createArticle: async (req, res, next) => {
     const { user, body } = req;
     try {
       const article = await Article.create({
@@ -16,7 +16,7 @@ export default {
     }
   },
 
-  show: async (req, res, next) => {
+  showArticle: async (req, res, next) => {
     const { params: { id } } = req;
     try {
       const article = await Article.find({ id });
@@ -28,7 +28,7 @@ export default {
     }
   },
 
-  update: async (req, res, next) => {
+  updateArticle: async (req, res, next) => {
     const { params: { id }, body } = req;
     try {
       const article = await Article.find({ id });
@@ -39,7 +39,7 @@ export default {
     }
   },
 
-  destroy: async (req, res, next) => {
+  deleteArticle: async (req, res, next) => {
     const { params: { id } } = req;
     try {
       const article = await Article.find({ id });
