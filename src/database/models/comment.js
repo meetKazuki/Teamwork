@@ -1,29 +1,25 @@
-import Model from './model';
+import { Model } from './index';
 
-export default class Article extends Model {
+export default class Comment extends Model {
   constructor(attributes) {
     super();
     this.id = attributes.id;
-    this.title = attributes.title;
-    this.article = attributes.article;
+    this.gifId = attributes.gifId;
+    this.articleId = attributes.articleId;
+    this.comment = attributes.comment;
     this.authorId = attributes.authorId;
-    this.createdAt = attributes.createdAt;
-    this.updatedAt = attributes.updatedAt;
-  }
-
-  belongsTo(user) {
-    return (this.authorId === user.id);
   }
 
   static table() {
-    return 'articles';
+    return 'comments';
   }
 
   static get attributes() {
     return {
       id: 'id',
-      title: 'title',
-      article: 'body',
+      gifId: 'gif_id',
+      articleId: 'article_id',
+      comment: 'body',
       authorId: 'user_id',
       createdAt: 'created_at',
       updatedAt: 'updated_at',
@@ -32,13 +28,13 @@ export default class Article extends Model {
 
   static async all(options) {
     const rows = await super.all(options);
-    const articles = this.collect(rows);
-    return articles;
+    const comments = this.collect(rows);
+    return comments;
   }
 
   static collect(rows) {
-    const articles = rows.map((row) => {
-      const article = {};
+    const comments = rows.map((row) => {
+      const comment = {};
       const deepValues = {};
 
       Object.entries(row).forEach((pairs) => {
@@ -46,11 +42,11 @@ export default class Article extends Model {
         if (key.includes('.')) {
           const [outerKey, innerKey] = key.split('.');
           deepValues[innerKey] = value;
-          article[outerKey] = deepValues;
-        } else article[key] = value;
+          comment[outerKey] = deepValues;
+        } else comment[key] = value;
       });
-      return article;
+      return comment;
     });
-    return articles;
+    return comments;
   }
 }

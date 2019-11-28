@@ -11,21 +11,21 @@ const {
   createSchema, readSchema, updateSchema, deleteSchema,
 } = articleSchemas;
 const {
-  create, show, update, destroy,
+  createArticle, showArticle, updateArticle, deleteArticle,
 } = articleController;
 
 article.post(
   '/',
   validator(createSchema),
   verifyToken,
-  create,
+  createArticle,
 );
 
 article.get(
   '/:id',
   validator(readSchema),
   verifyToken,
-  show,
+  showArticle,
 );
 
 article.patch(
@@ -33,7 +33,7 @@ article.patch(
   validator(updateSchema),
   verifyToken,
   isAuthor,
-  update,
+  updateArticle,
 );
 
 article.delete(
@@ -41,7 +41,7 @@ article.delete(
   validator(deleteSchema),
   verifyToken,
   isAuthor,
-  destroy,
+  deleteArticle,
 );
 
 export default article;

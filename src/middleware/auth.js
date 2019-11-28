@@ -1,7 +1,7 @@
 import { config } from 'dotenv';
 import jwt from 'jsonwebtoken';
 import { ApplicationError, NotFoundError } from '../helpers/error';
-import { Article, User } from '../database/models';
+import { Article, Gif, User } from '../database/models';
 
 config();
 
@@ -47,10 +47,14 @@ export default {
     const { id } = req.params;
     const userId = req.user.id;
 
-    const article = await Article.find({ id });
+    const post = await Article.find({ id }) || await Gif.find({ id });
 
-    if (!article) throw next(new NotFoundError('article not found'));
-    if (article.authorId !== userId) throw next(new ApplicationError(403, 'unauthorized. for author only!'));
+    if (!post) {
+      throw next(new NotFoundError('post not found'));
+    }
+    if (post.authorId !== userId) {
+      throw next(new ApplicationError(403, 'unauthorized. for author only!'));
+    }
 
     next();
   },

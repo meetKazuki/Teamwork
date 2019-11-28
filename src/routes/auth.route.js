@@ -12,9 +12,9 @@ const { signup, signin } = authController;
 
 auth.post(
   '/create-user',
+  validator(signupSchema),
   verifyToken,
   isAdmin,
-  validator(signupSchema),
   verifyExisting,
   signup,
 );
