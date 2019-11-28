@@ -10,8 +10,8 @@ const createUsers = `
   CREATE TYPE user_gender AS ENUM ('male', 'female');
   CREATE TABLE IF NOT EXISTS users(
     id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
-    firstname VARCHAR(50) NOT NULL,
-    lastname VARCHAR(50) NOT NULL,
+    firstname VARCHAR(255) NOT NULL,
+    lastname VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password TEXT NOT NULL,
     gender user_gender,
@@ -40,7 +40,7 @@ const createGifs = `
   CREATE TABLE IF NOT EXISTS gifs(
     id UUID PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    image_url VARCHAR(150) NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
   );`;
@@ -103,6 +103,7 @@ export const reset = async () => {
     await client.query('DROP TABLE IF EXISTS gifs CASCADE');
     await client.query('DROP TABLE IF EXISTS comments CASCADE');
   } catch (error) {
+    DEBUG(error);
     throw error;
   } finally {
     process.exit();

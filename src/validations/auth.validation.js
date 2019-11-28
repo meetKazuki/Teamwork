@@ -37,7 +37,7 @@ export default {
       .not()
       .isEmpty()
       .withMessage('Job role is required')
-      .isLength({ min: 3, max: 25 })
+      .isLength({ min: 3 })
       .withMessage('Job role should be between 3 to 25 characters'),
 
     check('department')
@@ -45,7 +45,7 @@ export default {
       .not()
       .isEmpty()
       .withMessage('Department is required')
-      .isLength({ min: 3, max: 25 })
+      .isLength({ min: 3 })
       .withMessage("Staff's department should be between 3 to 25 characters"),
 
     check('address')
@@ -69,10 +69,9 @@ export default {
       .not()
       .isEmpty({ ignore_whitespace: true })
       .withMessage('Password cannot be blank')
-      .isLength({ min: 8, max: 15 })
-      .withMessage('Password should be between 8 to 15 characters')
-      .isAlphanumeric()
-      .withMessage('Password must be alphanumeric'),
+      .isLength({ min: 8 })
+      .withMessage('Password should be between 8 to 15 characters'),
+    /* .isAlphanumeric() .withMessage('Password must be alphanumeric') */
   ],
 
   signinSchema: [
