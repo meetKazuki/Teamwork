@@ -12,7 +12,7 @@ export default class Article extends Model {
   }
 
   belongsTo(user) {
-    return (this.createdBy === user.id);
+    return (this.authorId === user.id);
   }
 
   static table() {
