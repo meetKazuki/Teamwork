@@ -1,6 +1,6 @@
-import { Model } from './index';
+import { Article } from './index';
 
-export default class Gif extends Model {
+export default class Gif extends Article {
   constructor(attributes) {
     super();
     this.id = attributes.id;

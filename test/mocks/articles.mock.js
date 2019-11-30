@@ -6,8 +6,8 @@ const newArticle = {
 };
 
 const updatedArticle = {
-  title: faker.lorem.sentence(),
-  article: faker.lorem.text(),
+  title: faker.lorem.sentence(20),
+  article: faker.lorem.text(20),
 };
 
 export { newArticle, updatedArticle };

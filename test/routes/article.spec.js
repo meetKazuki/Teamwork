@@ -1,10 +1,11 @@
-import { expect } from 'chai';
+import { expect, should } from 'chai';
 import request from 'supertest';
 import app from '../../src';
 
 import { newArticle, updatedArticle } from '../mocks/articles.mock';
 import { staff } from '../mocks/users.mock';
 
+should();
 const artId = '94189e3d-0379-4dd2-b03d-73fa8c14b3ab';
 
 describe('routes: /articles', () => {
@@ -31,30 +32,33 @@ describe('routes: /articles', () => {
         .set('Accept', 'application/json')
         .set('Authorization', `${staffToken}`)
         .end((err, res) => {
-          const { status, body: { data } } = res;
+          const {
+            status,
+            body: { data },
+          } = res;
           expect(status).to.equal(201);
           expect(data).to.be.an('object');
           expect(data).to.have.property('id');
           expect(data).to.have.property('title');
           expect(data).to.have.property('article');
-          expect(data).to.have.property('createdBy');
+          expect(data).to.have.property('authorId');
           expect(data.title).to.eql(newArticle.title);
           expect(data.article).to.eql(newArticle.article);
-          expect(data.createdBy).to.eql(staffId);
+          expect(data.authorId).to.eql(staffId);
           done(err);
         });
     });
 
     specify('error if token is not provided', (done) => {
       request(app)
-        .post('/auth/create-user')
+        .post('/articles')
         .send(newArticle)
         .set('Content-Type', 'application/json')
         .set('Accept', 'application/json')
         .end((err, res) => {
           expect(res.status).to.equal(412);
           expect(res.body.status).to.eql('error');
-          expect(res.body.error).to.eql('authorization header not set');
+          expect(res.body.error.message).to.eql('authorization header not set');
           done(err);
         });
     });
@@ -68,39 +72,44 @@ describe('routes: /articles', () => {
         .set('Authorization', `${staffToken}`)
         .end((err, res) => {
           expect(res.status).to.equal(400);
-          expect(res.body.status).to.eql('validation error');
-          expect(res.body.error).to.have.property('title');
-          expect(res.body.error).to.have.property('article');
+          expect(res.body.status).to.eql('error');
+          expect(res.body.error.message).to.eql('validation error');
+          expect(res.body.error.errors).to.have.property('title');
+          expect(res.body.error.errors).to.have.property('article');
           done(err);
         });
     });
   });
 
-  context('GET /articles /articles/:articleId', () => {
-    before((done) => {
-      request(app)
-        .post('/articles')
+  context.skip('GET /articles /articles/:articleId', () => {
+    before(async () => {
+      const res = await request(app)
+        .post('/articles/')
         .send(newArticle)
-        .set('Authorization', `${staffToken}`)
-        .end((err, res) => {
-          articleId = res.body.data.id;
-          done(err);
-        });
+        .set('Authorization', `${staffToken}`);
+
+      articleId = res.body.data.id;
     });
 
-    it.skip('should fetch a specific article record', async () => {
-      await request(app)
+    it('should fetch a specific article record', async () => {
+      const res = await request(app)
         .get(`articles/${articleId}`)
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json')
-        .set('Authorization', `${staffToken}`)
-        .end((err, res) => {
-          expect(res.status).to.equal(200);
-        });
+        .set('Authorization', `${staffToken}`);
+
+      res.status.should.equal(200);
     });
   });
 
   context('UPDATE /articles/:articleId', () => {
+    before(async () => {
+      const res = await request(app)
+        .post('/articles/')
+        .send(newArticle)
+        .set('Authorization', `${staffToken}`);
+
+      articleId = res.body.data.id;
+    });
+
     it('should update an article', (done) => {
       request(app)
         .patch(`/articles/${articleId}`)
@@ -109,7 +118,7 @@ describe('routes: /articles', () => {
         .set('Accept', 'application/json')
         .set('Authorization', `${staffToken}`)
         .end((err, res) => {
-          console.log('+++++++++++>>>>', res.body);
+          console.log('failing travis test ==>', res.body);
           const { status, body: { data } } = res;
           expect(status).to.equal(200);
           expect(data).to.be.an('object');
@@ -122,7 +131,7 @@ describe('routes: /articles', () => {
         });
     });
 
-    specify('error if article doesn\'t exist', (done) => {
+    specify("error if article doesn't exist", (done) => {
       request(app)
         .patch(`/articles/${artId}`)
         .send(updatedArticle)
@@ -130,7 +139,6 @@ describe('routes: /articles', () => {
         .set('Accept', 'application/json')
         .set('Authorization', `${staffToken}`)
         .end((err, res) => {
-          console.log('+++++++++++>>>>', res.body);
           expect(res.status).to.equal(404);
           done(err);
         });
@@ -164,7 +172,7 @@ describe('routes: /articles', () => {
         });
     });
 
-    specify('error if article doesn\'t exist', (done) => {
+    specify("error if article doesn't exist", (done) => {
       request(app)
         .delete(`/articles/${artId}`)
         .set('Content-Type', 'application/json')

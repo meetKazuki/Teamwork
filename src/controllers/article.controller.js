@@ -1,5 +1,5 @@
 import { ApplicationError, NotFoundError } from '../helpers/error';
-import { Article } from '../database/models';
+import { Article, Comment } from '../database/models';
 
 export default {
   createArticle: async (req, res, next) => {
@@ -45,6 +45,24 @@ export default {
       const article = await Article.find({ id });
       await article.delete(article);
       return res.status(200).json({ status: 'success', data: 'article deleted' });
+    } catch (error) {
+      return next(new ApplicationError(500, error));
+    }
+  },
+
+  createComment: async (req, res, next) => {
+    const { id } = req.params;
+    try {
+      const articleId = await Article.find({ id });
+      if (!articleId) return next(new NotFoundError('article ID does not exist'));
+
+      const comment = await Comment.create({
+        articleId,
+        authorId: req.user.id,
+        comment: req.body.comment,
+      });
+
+      return res.status(201).json({ status: 'succcess', data: comment });
     } catch (error) {
       return next(new ApplicationError(500, error));
     }

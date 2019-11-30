@@ -1,9 +1,11 @@
-import { expect } from 'chai';
+import { should, expect } from 'chai';
 import request from 'supertest';
 import app from '../../src';
 
 import { generateToken } from '../../src/helpers/auth';
 import { admin, newUser, staff } from '../mocks/users.mock';
+
+should();
 
 describe('routes: /auth', () => {
   let adminToken;
@@ -45,19 +47,15 @@ describe('routes: /auth', () => {
         });
     });
 
-    specify('error if user already exists', (done) => {
-      request(app)
+    specify('error if user already exists', async () => {
+      const res = await request(app)
         .post('/auth/create-user')
         .send(newUser)
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json')
-        .set('Authorization', `${adminToken}`)
-        .end((err, res) => {
-          expect(res.status).to.equal(409);
-          expect(res.body.status).to.eql('error');
-          expect(res.body.error).to.eql('email already taken');
-          done(err);
-        });
+        .set('Authorization', `${adminToken}`);
+
+      res.status.should.equal(409);
+      res.body.status.should.eql('error');
+      res.body.error.message.should.eql('user already exist');
     });
 
     specify('error if token is not provided', (done) => {
@@ -73,20 +71,16 @@ describe('routes: /auth', () => {
         });
     });
 
-    specify('error if token provided is invalid', (done) => {
+    specify('error if token provided is invalid', async () => {
       staffToken = generateToken(staff);
-      request(app)
+      const res = await request(app)
         .post('/auth/create-user')
         .send(newUser)
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json')
-        .set('Authorization', `${staffToken}`)
-        .end((err, res) => {
-          expect(res.status).to.equal(403);
-          expect(res.body.status).to.eql('error');
-          expect(res.body.error).to.eql('invalid credentials');
-          done(err);
-        });
+        .set('Authorization', `${staffToken}`);
+
+      res.status.should.equal(403);
+      res.body.status.should.eql('error');
+      res.body.error.message.should.eql('invalid credentials');
     });
   });
 
@@ -116,18 +110,14 @@ describe('routes: /auth', () => {
         });
     });
 
-    specify('error on invalid credentials', (done) => {
-      request(app)
+    specify('error on invalid credentials', async () => {
+      const res = await request(app)
         .post('/auth/signin')
-        .send({ email: newUser.email, password: 'theweeknd' })
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json')
-        .end((err, res) => {
-          expect(res.status).to.equal(401);
-          expect(res.body.status).to.eql('error');
-          expect(res.body.error).to.eql('email/password incorrect');
-          done(err);
-        });
+        .send({ email: newUser.email, password: 'theweeknd' });
+
+      res.status.should.equal(401);
+      res.body.status.should.eql('error');
+      res.body.error.message.should.eql('email/password is invalid');
     });
   });
 });
