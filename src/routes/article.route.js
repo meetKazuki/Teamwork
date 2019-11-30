@@ -8,10 +8,18 @@ const article = Router();
 
 const { verifyToken, isAuthor } = authMiddleware;
 const {
-  createSchema, readSchema, updateSchema, deleteSchema,
+  createSchema,
+  readSchema,
+  updateSchema,
+  deleteSchema,
+  createCommentSchema,
 } = articleSchemas;
 const {
-  createArticle, showArticle, updateArticle, deleteArticle,
+  createArticle,
+  showArticle,
+  updateArticle,
+  deleteArticle,
+  createComment,
 } = articleController;
 
 article.post(
@@ -19,6 +27,13 @@ article.post(
   validator(createSchema),
   verifyToken,
   createArticle,
+);
+
+article.post(
+  '/:id/comment',
+  validator(createCommentSchema),
+  verifyToken,
+  createComment,
 );
 
 article.get(

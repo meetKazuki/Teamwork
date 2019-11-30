@@ -1,6 +1,6 @@
-import { Model } from './index';
+import { Gif } from './index';
 
-export default class Comment extends Model {
+export default class Comment extends Gif {
   constructor(attributes) {
     super();
     this.id = attributes.id;
@@ -24,12 +24,6 @@ export default class Comment extends Model {
       createdAt: 'created_at',
       updatedAt: 'updated_at',
     };
-  }
-
-  static async all(options) {
-    const rows = await super.all(options);
-    const comments = this.collect(rows);
-    return comments;
   }
 
   static collect(rows) {
