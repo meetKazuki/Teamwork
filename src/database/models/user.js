@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { config } from 'dotenv';
-import Model from './model';
+import { Model } from './index';
 
 config();
 

@@ -1,4 +1,4 @@
-import Model from './model';
+import { Model, User } from './index';
 
 export default class Article extends Model {
   constructor(attributes) {
