@@ -2,8 +2,10 @@ import { config } from 'dotenv';
 import debug from 'debug';
 import express from 'express';
 import morgan from 'morgan';
+import swaggerUi from 'swagger-ui-express';
 import errorHandler from './middleware/errorHandler';
 import router from './routes';
+import swaggerDoc from '../docs/teamwork.json';
 
 config();
 
@@ -17,13 +19,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(router);
 app.use(errorHandler);
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
-app.get('/', (_, res) => {
-  res.status(200).json({
-    status: 'success',
-    message: 'welcome to Teamwork',
-  });
-});
+app.get('/', (_, res) => res.status(301).redirect('/docs'));
 
 app.all('*', (_, res) => {
   res.status(404).json({
