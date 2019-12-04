@@ -12,7 +12,7 @@ export default {
       });
       return res.status(201).json({ status: 'success', data: article });
     } catch (error) {
-      return next(new ApplicationError(500, error));
+      return next(new ApplicationError(500, error.message));
     }
   },
 
@@ -24,7 +24,7 @@ export default {
 
       return res.status(200).json({ status: 'success', data: article });
     } catch (error) {
-      return next(new ApplicationError(500, error));
+      return next(new ApplicationError(500, error.message));
     }
   },
 
@@ -35,7 +35,7 @@ export default {
       const updatedArticle = await article.update(body);
       return res.status(200).json({ status: 'success', data: updatedArticle });
     } catch (error) {
-      return next(new ApplicationError(500, error));
+      return next(new ApplicationError(500, error.message));
     }
   },
 
@@ -46,25 +46,33 @@ export default {
       await article.delete(article);
       return res.status(200).json({ status: 'success', data: 'article deleted' });
     } catch (error) {
-      return next(new ApplicationError(500, error));
+      return next(new ApplicationError(500, error.message));
     }
   },
 
   createComment: async (req, res, next) => {
     const { id } = req.params;
+    const { user, body } = req;
     try {
-      const articleId = await Article.find({ id });
-      if (!articleId) return next(new NotFoundError('article ID does not exist'));
+      const article = await Article.find({ id });
+      if (!article) return next(new NotFoundError());
 
-      const comment = await Comment.create({
-        articleId,
-        authorId: req.user.id,
-        comment: req.body.comment,
-      });
+      // console.log('*****', article);
+      // console.log('*****', id);
+      // console.log('*****', user.id);
 
-      return res.status(201).json({ status: 'succcess', data: comment });
+      /* const comment = await Comment.create({
+        // articleId: id,
+        authorId: user.id,
+        comment: body.comment,
+      }); */
+
+      console.log('*****', id);
+
+
+      return res.status(201).json({ status: 'succcess'0 /* data: comment */ });
     } catch (error) {
-      return next(new ApplicationError(500, error));
+      return next(new ApplicationError(500, error.message));
     }
   },
 };
