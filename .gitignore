@@ -60,4 +60,5 @@ typings/
 # next.js build output
 .next
 
+docs/README.md
 package-lock.json

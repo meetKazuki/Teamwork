@@ -7,12 +7,11 @@ describe('server setup', () => {
     expect(app).to.be.a('function');
   });
 
-  it('should return success on index route', (done) => {
+  it('should redirect to docs route', (done) => {
     request(app)
       .get('/')
       .end((err, res) => {
-        expect(res.status).to.equal(200);
-        expect(res.body.message).to.eql('welcome to Teamwork');
+        expect(res.status).to.equal(302);
         done(err);
       });
   });

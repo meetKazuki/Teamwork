@@ -69,8 +69,7 @@ export default {
 
       console.log('*****', id);
 
-
-      return res.status(201).json({ status: 'succcess'0 /* data: comment */ });
+      return res.status(201).json({ status: 'succcess'/* data: comment */ });
     } catch (error) {
       return next(new ApplicationError(500, error.message));
     }
